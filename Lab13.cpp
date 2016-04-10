@@ -12,9 +12,6 @@ void MatrixQuickSort(int FirstElement, int LastElement, VariableClassType** Data
 template <class VariableClassType>
 void MatrixOutput(VariableClassType** DataMatrix, int ColumnNumber, int RowNumber);
 
-
-
-
 void main()//main function
 {
 	short OperationCode;//defining variables
