@@ -2,17 +2,15 @@
 #include <iostream.h>
 #include <string>//string type part
 
-//using namespace std;//using namespace for easy usage of string library
-
 const MaximumRowNumber=100, MaximumColumnNumber=50;//defining maximum values of rows and column in matrix
 
-void OutputMenu();
+void OutputMenu();//functions prototypes
+template <class VariableClassType>//templates for matrix functions
+void MatrixInput(VariableClassType** DataMatrix, int ColumnNumber, int RowNumber);
 template <class VariableClassType>
-void MatrixInput(VariableClassType Matrix[][MaximumRowNumber], int ColumnNumber, int RowNumber);
+void MatrixQuickSort(int FirstElement, int LastElement, VariableClassType** DataMatrix, int RowNumber);
 template <class VariableClassType>
-void MatrixQuickSort(int FirstElement, int LastElement, VariableClassType Matrix[][MaximumRowNumber], int RowNumber);
-template <class VariableClassType>
-void MatrixOutput(VariableClassType Matrix[][MaximumRowNumber], int ColumnNumber, int RowNumber);
+void MatrixOutput(VariableClassType** DataMatrix, int ColumnNumber, int RowNumber);
 
 
 
@@ -20,10 +18,16 @@ void MatrixOutput(VariableClassType Matrix[][MaximumRowNumber], int ColumnNumber
 void main()//main function
 {
 	short OperationCode;//defining variables
-	int iMatrix[MaximumColumnNumber][MaximumRowNumber];
-	float fMatrix[MaximumColumnNumber][MaximumRowNumber];
-	string sMatrix[MaximumColumnNumber][MaximumRowNumber];
-	int ColumnNumber,RowNumber;
+	int ColumnNumber,RowNumber,Counter;
+	int **iMatrix = new int*[MaximumColumnNumber];//create matrices of all three types
+	float **fMatrix = new float*[MaximumColumnNumber];
+	string **sMatrix = new string*[MaximumColumnNumber];
+	for(Counter=0; Counter<MaximumColumnNumber; Counter++)
+	{
+		iMatrix[Counter] = new int[MaximumRowNumber];
+		fMatrix[Counter] = new float[MaximumRowNumber];
+		sMatrix[Counter] = new string[MaximumRowNumber];
+	}
 	OutputMenu();//show menu of available commands
 	while(1)//endless repeat
 	{
@@ -73,20 +77,20 @@ void OutputMenu()//show menu of available commands
 }
 
 template <class VariableClassType>
-void MatrixInput(VariableClassType iMatrix[][MaximumRowNumber], int ColumnNumber, int RowNumber)//integer matrix data input
+void MatrixInput(VariableClassType** DataMatrix, int ColumnNumber, int RowNumber)//matrix data input
 {
 int ColumnCounter,RowCounter;
    for (RowCounter = 0; RowCounter < RowNumber; RowCounter++)
    {
 	  for (ColumnCounter = 0; ColumnCounter < ColumnNumber; ColumnCounter++)
 	  {
-		  cin>>iMatrix[ColumnCounter][RowCounter];
+		  cin>>DataMatrix[ColumnCounter][RowCounter];
 	  }
    }
 }
 
 template <class VariableClassType>
-void MatrixOutput(VariableClassType iMatrix[][MaximumRowNumber], int ColumnNumber, int RowNumber)//integer matrix data output
+void MatrixOutput(VariableClassType** DataMatrix, int ColumnNumber, int RowNumber)//matrix data output
 {
 int ColumnCounter,RowCounter;
    cout<<"\n";
@@ -94,27 +98,27 @@ int ColumnCounter,RowCounter;
    {
 	  for (ColumnCounter = 0; ColumnCounter < ColumnNumber; ColumnCounter++)
 	  {
-		  cout<<iMatrix[ColumnCounter][RowCounter]<<" ";
+		  cout<<DataMatrix[ColumnCounter][RowCounter]<<" ";
 	  }
 	  cout<<"\n";
    }
 }
 
 template <class VariableClassType>
-void MatrixQuickSort(int FirstElement, int LastElement, VariableClassType iMatrix[][MaximumRowNumber], int RowNumber)//integer matrix sort
+void MatrixQuickSort(int FirstElement, int LastElement, VariableClassType** DataMatrix, int RowNumber)//matrix sort
 {
 	VariableClassType Pivot, TemporaryVariable; //defining variables
 	int FirstSubarrayElement,LastSubarrayElement,Counter;
 	FirstSubarrayElement=FirstElement;//assign data from external variables to internal counters
 	LastSubarrayElement=LastElement;
-	Pivot=iMatrix[(FirstSubarrayElement+LastSubarrayElement)/2][0];//defining pivot element
+	Pivot=DataMatrix[(FirstSubarrayElement+LastSubarrayElement)/2][0];//defining pivot element
 	while (FirstSubarrayElement<=LastSubarrayElement)//checking counters intersection
 	{
-		while (iMatrix[FirstSubarrayElement][0]<Pivot)//while element is smaller than pivot
+		while (DataMatrix[FirstSubarrayElement][0]<Pivot)//while element is smaller than pivot
 		{
 			FirstSubarrayElement++;//left counter increment
 		}
-		while (iMatrix[LastSubarrayElement][0]>Pivot)//while element is bigger than pivot
+		while (DataMatrix[LastSubarrayElement][0]>Pivot)//while element is bigger than pivot
 		{
 			LastSubarrayElement--;//right counter decrement
 		}
@@ -122,16 +126,16 @@ void MatrixQuickSort(int FirstElement, int LastElement, VariableClassType iMatri
 		{
 			for (Counter = 0; Counter < RowNumber; Counter++)//replacement of all elements in column through temporary variable
 			{
-				TemporaryVariable=iMatrix[FirstSubarrayElement][Counter];
-				iMatrix[FirstSubarrayElement][Counter]=iMatrix[LastSubarrayElement][Counter];
-				iMatrix[LastSubarrayElement][Counter]=TemporaryVariable;
+				TemporaryVariable=DataMatrix[FirstSubarrayElement][Counter];
+				DataMatrix[FirstSubarrayElement][Counter]=DataMatrix[LastSubarrayElement][Counter];
+				DataMatrix[LastSubarrayElement][Counter]=TemporaryVariable;
 			}
 			FirstSubarrayElement++;//left counter increment
 			LastSubarrayElement--;//right counter decrement
 		}
 	}
 	if (FirstElement<LastSubarrayElement)//sorting of left part of matrix
-		MatrixQuickSort(FirstElement,LastSubarrayElement,iMatrix, RowNumber);
+		MatrixQuickSort(FirstElement,LastSubarrayElement,DataMatrix, RowNumber);
 	if (FirstSubarrayElement<LastElement)//sorting of right part of matrix
-		MatrixQuickSort(FirstSubarrayElement,LastElement,iMatrix, RowNumber);
+		MatrixQuickSort(FirstSubarrayElement,LastElement,DataMatrix, RowNumber);
 }
