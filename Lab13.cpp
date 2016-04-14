@@ -111,11 +111,11 @@ void MatrixQuickSort(int FirstElement, int LastElement, VariableClassType** Data
 	Pivot=DataMatrix[(FirstSubarrayElement+LastSubarrayElement)/2][0];//defining pivot element
 	while (FirstSubarrayElement<=LastSubarrayElement)//checking counters intersection
 	{
-		while (DataMatrix[FirstSubarrayElement][0]<Pivot)//while element is smaller than pivot
+		while (DataMatrix[FirstSubarrayElement][0]>Pivot)//while element is smaller than pivot
 		{
 			FirstSubarrayElement++;//left counter increment
 		}
-		while (DataMatrix[LastSubarrayElement][0]>Pivot)//while element is bigger than pivot
+		while (DataMatrix[LastSubarrayElement][0]<Pivot)//while element is bigger than pivot
 		{
 			LastSubarrayElement--;//right counter decrement
 		}
